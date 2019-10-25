@@ -30,14 +30,12 @@ class Result {
 }
 
 public class DistanceExamination {
-    private List<User> m_users;
+    private List<User> m_users = new LinkedList<User>();
     private List<Question> m_questions;
     private User m_currentUser;
 
-    public static void main(String[] args) {
-        List<User> users = new LinkedList<User>();
-
-        users.add(new Admin());
+    public static void main(String[] args)  {
+        m_users.add(new Admin());
 
         Scanner in = new Scanner(System.in);
 
