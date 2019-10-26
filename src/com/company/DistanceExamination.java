@@ -1,7 +1,12 @@
 package com.company;
 
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class Question {
     private String m_text;
@@ -30,57 +35,78 @@ class Result {
 }
 
 public class DistanceExamination {
-    private List<User> m_users = new LinkedList<User>();
-    private List<Question> m_questions;
-    private User m_currentUser;
+    // loading data
+    private static List<User> m_users = new LinkedList<User>();
+    private static List<Question> m_questions;
 
-    public static void main(String[] args)  {
-        m_users.add(new Admin());
+    // global vars
+    private static Scanner  in              = new Scanner(System.in);
+    private static User     m_currentUser   = null;
+    private static boolean  unknownUser     = true;
 
-        Scanner in = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        if (loadData()) {
+            m_users.add(new Admin());
+            m_users.add(new Student("Михаил", "max", "max"));
 
-        boolean unknownUser = true;
+            while (true) {
+                while (unknownUser) {
+                    String login = "";
+                    String password = "";
 
-        while (unknownUser) {
-            String login = "";
-            String password = "";
+                    System.out.print("Login: ");
+                    login = in.nextLine();
 
-            System.out.print("Login: ");
-            login = in.nextLine();
+                    System.out.print("Password: ");
+                    password = in.nextLine();
 
-            System.out.print("Password: ");
-            password = in.nextLine();
+                    m_currentUser = findUser(login, password);
 
-            for (User user : users) {
-                if (user.enter(login, password)) {
-                    System.out.println("Welcome, " + user.getName() + ".\nSuccesses authorization!");
-                    unknownUser = false;
+                    if (unknownUser && m_currentUser == null)
+                        System.out.println("Unknown user.");
                 }
+
+                m_currentUser.consoleInterface();
+
+                m_currentUser = null;
+                unknownUser = true;
             }
-
-            if (unknownUser)
-                System.out.println("Unknown user.");
         }
+        else System.out.println("Error loading data.");
     }
 
-    private void addUser(String name, String login, String password, String reputation) {
-        //...
-    }
-
-    private User findUser(String login, String password) {
-        //...
+    private static User findUser(String login, String password) {
+        for (User user : m_users) {
+            if (user.enter(login, password)) {
+                System.out.println("Welcome, " + user.getName() + ".\nSuccesses authorization!");
+                unknownUser = false;
+                return user;
+            }
+        }
         return null;
     }
 
-    private void save() {
-        //...
+    private static boolean loadData() throws IOException {
+        FileReader reader = new FileReader("students.txt");
+        String textFile = "";
+        int c;
+
+        while ((c = reader.read()) > 0)
+            textFile += (char)c;
+
+        String regex = "[a-zA-Z[а-яА-Я]]{2,}\\G\\s\\b[a-zA-Z[а-яА-Я]]{2,}\\G\\s\\b[a-zA-Z[а-яА-Я]]{2,}\\b";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(textFile);
+
+        while (matcher.find()) {
+            System.out.println(textFile.substring(matcher.start(), matcher.end()));
+        }
+
+        return false;
     }
 
-    private void load() {
-        //...
-    }
-
-    private List<Result> getResults() {
-        return null;
+    private boolean saveData() {
+        return false;
     }
 }
