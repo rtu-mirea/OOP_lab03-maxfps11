@@ -1,0 +1,3 @@
+[ExamInfo]
+QuestionQuantity = 1
+
