@@ -32,27 +32,65 @@ abstract class User {
 }
 
 class Student extends User {
-    private int m_questionsValue;
-    private int[] m_questionNumbers;
+    private Scanner in = new Scanner(System.in);
 
-    private int m_questionsCount = 0;
+    private List<Question> m_questions = null;
+
+    private final int m_questionsValue = 5;
+    private int[] m_questionNumbers = new int[m_questionsValue];
+
     private int m_rightAnswers = 0;
 
-    Student(String name, String login, String password) {
+    private boolean isPassed = false;
+
+    Student(String name, String login, String password, List<Question> questions) {
         super(name, login, password);
-
+        this.m_questions = questions;
     }
 
-    private boolean initData() {
-
-        return false;
-    }
-
-    void randQuestionNumbers() {
+    private void passExam() {
         Random random = new Random();
+        
+        System.out.println("Успешной сдачи экзамена!");
 
-        for (int number : this.m_questionNumbers) {
-            number = random.nextInt() % 6 + 1;
+        String answer = in.nextLine();
+
+        for (int i = 0; i < 5; ++i) {
+            Question question = this.m_questions.get(random.nextInt(11));
+            question.printQuestion();
+
+            System.out.print("Ваш ответ: ");
+            answer = in.nextLine();
+
+            if (answer.equals(question.getAnswer())) {
+                this.m_rightAnswers++;
+            }
+        }
+
+        System.out.print("Вы ответили на " + this.m_rightAnswers);
+
+        if (this.m_rightAnswers == 1)
+            System.out.println(" вопрос.");
+        else if (this.m_rightAnswers > 1 && this.m_rightAnswers < 5)
+            System.out.println(" вопроса.");
+        else
+            System.out.println(" вопросов.");
+
+        printResult();
+    }
+
+    private void printResult() {
+        System.out.print("Ваша оценка за экзамен: ");
+
+        switch (this.m_rightAnswers) {
+            case 0:
+            case 1:
+            case 2:
+                System.out.println(2);
+                break;
+            default:
+                System.out.println(this.m_rightAnswers);
+                break;
         }
     }
 
@@ -63,8 +101,6 @@ class Student extends User {
 
     @Override
     void consoleInterface() {
-        Scanner in = new Scanner(System.in);
-
         if (this.isLogin)
             System.out.println("Добро пожаловать в главное меню " + this.m_name + ".");
 
@@ -76,6 +112,18 @@ class Student extends User {
 
             switch (value) {
                 case 1:
+                    if (!this.isPassed) {
+                        passExam();
+                        this.isPassed = true;
+                    } else {
+                        System.out.println("Вы уже сдавали экзамен. Обратитесь к преподавателю за результатами.");
+                    }
+                    break;
+                case 2:
+                    if (isPassed)
+                        printResult();
+                    else
+                        System.out.println("Вы ещё не сдавали экзамен.");
                     break;
                 case 0:
                     this.isLogin = false;
@@ -87,13 +135,11 @@ class Student extends User {
         }
     }
 
-    // menus methods
-
-
     // support methods for menus methods
     private void printMainConsoleMenu() {
         System.out.println("\tГлавное меню.\n" +
                 "[1] Сдать экзамен.\n" +
+                "[2] Узнать результат.\n" +
                 "[0] Покинуть учетную запись.");
     }
 
@@ -301,7 +347,7 @@ class Admin extends User {
                 if (password.equals(password.substring(loginAndPassMatcher.start(), loginAndPassMatcher.end())))
                     isSuccess = true;
         }
-        this.m_users.add(new Student(name, login, password));
+        this.m_users.add(new Student(name, login, password, this.m_questions));
     }
 
     private void delAccount() {

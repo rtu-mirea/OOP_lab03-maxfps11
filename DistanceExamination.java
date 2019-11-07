@@ -25,6 +25,10 @@ class Question {
         return this.m_answer.equals(answer);
     }
 
+    void printQuestion() {
+        System.out.println(this.m_text);
+    }
+
     void print() {
         System.out.println("Текст вопроса: " + this.m_text + "\nОтвет: " + this.m_answer);
     }
@@ -64,6 +68,9 @@ public class DistanceExamination {
 
                     System.out.print("Login: ");
                     login = in.nextLine();
+
+                    if (login.equals("exit"))
+                        System.exit(0);
 
                     System.out.print("Password: ");
                     password = in.nextLine();
@@ -154,7 +161,8 @@ public class DistanceExamination {
         while (nameMatcher.find() && loginMatcher.find() && passMatcher.find()) {
             m_users.add(new Student(studentsFile.substring(nameMatcher.start(), nameMatcher.end()).replace("name:", ""),
                     studentsFile.substring(loginMatcher.start(), loginMatcher.end()).replace("login:", ""),
-                    studentsFile.substring(passMatcher.start(), passMatcher.end()).replace("password:", "")));
+                    studentsFile.substring(passMatcher.start(), passMatcher.end()).replace("password:", ""),
+                    m_questions));
         }
         reader = new FileReader("/Users/maxfps11/IdeaProjects/ThirdLaboratoryWork/src/com/company/questions.txt");
         StringBuilder questionsFile = new StringBuilder();
