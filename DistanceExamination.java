@@ -4,51 +4,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class Question {
-    private String m_text;
-    private String m_answer;
-
-    Question(String text, String answer) {
-        this.m_text = text;
-        this.m_answer = answer;
-    }
-
-    String getText() {
-        return this.m_text;
-    }
-
-    String getAnswer() {
-        return this.m_answer;
-    }
-
-    boolean isCorrect(String answer) {
-        return this.m_answer.equals(answer);
-    }
-
-    void printQuestion() {
-        System.out.println(this.m_text);
-    }
-
-    void print() {
-        System.out.println("Текст вопроса: " + this.m_text + "\nОтвет: " + this.m_answer);
-    }
-}
-
-class ExamSettings {
-    private Map<String, Integer> parameters = new TreeMap<String, Integer>();
-
-    Integer getParameters(String key) {
-        return this.parameters.get(key);
-    }
-
-    void setParameters(String key, Integer value) {
-        this.parameters.put(key, value);
-    }
-}
-
 public class DistanceExamination {
     // loading data
-    private static ExamSettings m_settings = new ExamSettings();
     private static List<User> m_users = new LinkedList<User>();
     private static List<Question> m_questions = new LinkedList<Question>();
 
@@ -110,11 +67,11 @@ public class DistanceExamination {
         while ((c = reader.read()) > 0)
             examInfoFile.append((char) c);
 
-        String parameterLineRegex = "\\b[a-zA-Z]+\\b\\s*=\\s*\\b\\d+\\b";
-        String parameterNameRegex = "\\b[a-zA-Z]+\\b";
-        String parameterValueRegex = "\\b\\d+\\b";
+        //String parameterLineRegex = "\\b[a-zA-Z]+\\b\\s*=\\s*\\b\\d+\\b";
+        //String parameterNameRegex = "\\b[a-zA-Z]+\\b";
+        //String parameterValueRegex = "\\b\\d+\\b";
 
-        Pattern pattern = Pattern.compile(parameterLineRegex);
+        Pattern pattern;// = Pattern.compile(parameterLineRegex);
         /*Matcher parameterLineMatcher = pattern.matcher(examInfoFile.toString());
 
         Pattern parameterValuePattern = Pattern.compile(parameterValueRegex);
@@ -138,6 +95,7 @@ public class DistanceExamination {
 
             System.out.println(m_settings.getParameters("QuestionQuantity"));
         }*/
+        reader.close();
 
         reader = new FileReader("/Users/maxfps11/IdeaProjects/ThirdLaboratoryWork/src/com/company/students.txt");
         StringBuilder studentsFile = new StringBuilder();
@@ -164,6 +122,8 @@ public class DistanceExamination {
                     studentsFile.substring(passMatcher.start(), passMatcher.end()).replace("password:", ""),
                     m_questions));
         }
+        reader.close();
+
         reader = new FileReader("/Users/maxfps11/IdeaProjects/ThirdLaboratoryWork/src/com/company/questions.txt");
         StringBuilder questionsFile = new StringBuilder();
 
@@ -187,6 +147,7 @@ public class DistanceExamination {
                     questionsFile.substring(answerMatcher.start(), answerMatcher.end()).replace(
                             "answer:", "")));
         }
+        reader.close();
         return studentsFile.length() > 0 && questionsFile.length() > 0;
     }
 
