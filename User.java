@@ -1,9 +1,3 @@
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 abstract class User {
     protected String m_name;
     protected String m_login;

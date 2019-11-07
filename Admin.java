@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.Scanner;
+
 class Admin extends User {
     private Scanner in = new Scanner(System.in);
 

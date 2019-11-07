@@ -1,3 +1,7 @@
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+
 class Student extends User {
     private Scanner         m_in            = new Scanner(System.in);
     private List<Question>  m_questions     = null;
