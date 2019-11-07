@@ -32,16 +32,10 @@ abstract class User {
 }
 
 class Student extends User {
-    private Scanner in = new Scanner(System.in);
-
-    private List<Question> m_questions = null;
-
-    private final int m_questionsValue = 5;
-    private int[] m_questionNumbers = new int[m_questionsValue];
-
-    private int m_rightAnswers = 0;
-
-    private boolean isPassed = false;
+    private Scanner         in              = new Scanner(System.in);
+    private List<Question>  m_questions     = null;
+    private int             m_rightAnswers  = 0;
+    private boolean         isPassed        = false;
 
     Student(String name, String login, String password, List<Question> questions) {
         super(name, login, password);
@@ -474,8 +468,6 @@ class Admin extends User {
                     break;
                 case 2:
                     secondSubMenuConsoleInterface();
-                    break;
-                case 3:
                     break;
                 case 0:
                     this.isLogin = false;
